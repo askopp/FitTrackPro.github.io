@@ -3,157 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#4361ee">
-    <!-- Balises PWA corrigées -->
+    <title>FitTrack Pro - Suivi d'Entraînement</title>
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-<!-- Nouvelle balise standard -->
-<meta name="mobile-web-app-capable" content="yes">
-<!-- Ancienne balise conservée pour compatibilité iOS -->
-<meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     
-    <title>FitTrack Pro - Votre Coach Personnel</title>
-    
-    <!-- Polices et icônes -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    
-    <!-- Fichiers locaux CORRIGÉS -->
-    <link rel="stylesheet" href="./css/style.css?v=4.0">
-    <link rel="manifest" href="./manifest.json">
-    <link rel="icon" href="./images/favicon.ico">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #4895ef;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background-color: var(--accent);
+            border-radius: 5px;
+            transition: width 0.3s ease;
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+        }
+        
+        .calendar-day {
+            text-align: center;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        
+        .completed {
+            background-color: #4cc9f0;
+            color: white;
+        }
+    </style>
 </head>
 <body>
-    <div class="app-container">
-        <!-- En-tête -->
-        <header class="app-header">
-            <div class="header-content">
-                <div class="logo">
-                    <i class="fas fa-dumbbell"></i>
-                    <h1>FitTrack Pro</h1>
-                </div>
-                <div class="user-avatar">
-                    <span>JP</span>
-                </div>
+    <div class="container">
+        <h1>FitTrack Pro</h1>
+        <h2>Votre Programme sur 30 Jours</h2>
+        
+        <div class="progress-section">
+            <p>Phase 1: Jours 1-10</p>
+            <div class="progress-container">
+                <div class="progress-bar" style="width: 20%;"></div>
             </div>
-        </header>
-
-        <!-- Contenu principal -->
-        <main class="main-content">
-            <!-- Section progression -->
-            <section class="progress-section">
-                <div class="progress-card">
-                    <h2>Votre Programme sur 30 Jours</h2>
-                    <div class="phase-badge">Phase 1: Jours 1-10</div>
-                    
-                    <div class="progress-tracker">
-                        <div class="progress-bar" style="width: 20%;"></div>
-                    </div>
-                    
-                    <div class="progress-details">
-                        <span><i class="fas fa-calendar-day"></i> Jour 3 sur 30</span>
-                        <span><i class="fas fa-check-circle"></i> 6% complété</span>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Statistiques -->
-            <section class="stats-section">
-                <div class="stat-circle" style="--progress: 60%">
-                    <div class="stat-inner">
-                        <div class="stat-value">3</div>
-                        <div class="stat-label">Jours</div>
-                    </div>
-                </div>
-                <div class="stat-circle" style="--progress: 80%">
-                    <div class="stat-inner">
-                        <div class="stat-value">12</div>
-                        <div class="stat-label">Exercices</div>
-                    </div>
-                </div>
-                <div class="stat-circle" style="--progress: 45%">
-                    <div class="stat-inner">
-                        <div class="stat-value">2.1L</div>
-                        <div class="stat-label">Eau</div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Calendrier -->
-            <section class="calendar-section">
-                <h3><i class="fas fa-calendar-alt"></i> Suivi Mensuel</h3>
-                <div class="calendar-grid" id="calendarGrid">
-                    <!-- Généré par JS -->
-                </div>
-            </section>
-
-            <!-- Séance du jour -->
-            <section class="workout-section">
-                <h3><i class="fas fa-dumbbell"></i> Séance d'Aujourd'hui</h3>
-                <div class="workout-card">
-                    <div class="workout-header">
-                        <span class="workout-day">Mercredi - Jour 3</span>
-                        <span class="workout-type">Force & Endurance</span>
-                    </div>
-                    
-                    <div class="exercise-list">
-                        <div class="exercise-item">
-                            <i class="fas fa-running exercise-icon"></i>
-                            <div class="exercise-details">
-                                <span class="exercise-name">Fentes avant</span>
-                                <span class="exercise-sets">3 × 15 reps</span>
-                            </div>
-                            <span class="exercise-rest">60s repos</span>
-                        </div>
-                        <!-- Autres exercices -->
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <!-- Navigation -->
-        <nav class="bottom-nav">
-            <a href="#" class="nav-item active">
-                <i class="fas fa-home"></i>
-                <span>Accueil</span>
-            </a>
-            <a href="#" class="nav-item">
-                <i class="fas fa-calendar-alt"></i>
-                <span>Programme</span>
-            </a>
-            <a href="#" class="nav-item">
-                <i class="fas fa-chart-bar"></i>
-                <span>Stats</span>
-            </a>
-            <a href="#" class="nav-item">
-                <i class="fas fa-cog"></i>
-                <span>Réglages</span>
-            </a>
-        </nav>
+            <p>Jour 3 sur 30 (20% complété)</p>
+        </div>
+        
+        <div class="stats-section">
+            <div class="stat-item">
+                <span class="stat-value">12</span>
+                <span class="stat-label">Exercices</span>
+            </div>
+        </div>
+        
+        <h3>Suivi Mensuel</h3>
+        <div class="calendar-grid" id="calendarGrid">
+            <!-- Généré par JavaScript -->
+        </div>
     </div>
 
-    <!-- Scripts CORRIGÉS -->
-    <script src="./js/script.js?v=4.0"></script>
     <script>
-        // Initialisation garantie sans erreur
+        // Génération du calendrier
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('FitTrack Pro - Initialisation réussie');
-            
-            // Génération du calendrier sécurisée
-            try {
-                const grid = document.getElementById('calendarGrid');
-                if(grid) {
-                    let html = '';
-                    for(let i = 1; i <= 30; i++) {
-                        const completed = i <= 3 ? 'completed' : '';
-                        const active = i === 3 ? 'active' : '';
-                        html += `<div class="calendar-day ${completed} ${active}">${i}</div>`;
-                    }
-                    grid.innerHTML = html;
+            const calendar = document.getElementById('calendarGrid');
+            if (calendar) {
+                let html = '';
+                for (let i = 1; i <= 30; i++) {
+                    const completed = i <= 3 ? 'completed' : '';
+                    html += `<div class="calendar-day ${completed}">${i}</div>`;
                 }
-            } catch(e) {
-                console.error('Erreur génération calendrier:', e);
+                calendar.innerHTML = html;
             }
+            
+            console.log('FitTrack Pro initialisé avec succès');
         });
     </script>
 </body>
