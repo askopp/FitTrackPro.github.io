@@ -1,51 +1,54 @@
-// Initialisation de FitTrack Pro
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('FitTrack Pro initialisé');
+// FitTrack Pro - Main Application Script
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('Application initialisée');
     
-    // Gestion du toggle switch
-    const toggleSwitch = document.querySelector('.toggle-switch input');
-    if (toggleSwitch) {
-        toggleSwitch.addEventListener('change', function() {
-            if(this.checked) {
-                markDayCompleted();
-                updateProgress();
-            }
-        });
-    }
-
-    // Génération du calendrier
-    generateCalendar();
+    // Initialisation du calendrier
+    initCalendar();
+    
+    // Gestion de la progression
+    initProgressTracker();
 });
 
-function markDayCompleted() {
-    const activeDay = document.querySelector('.calendar-day.active');
-    if (activeDay) {
-        activeDay.classList.add('completed');
-        activeDay.classList.remove('active');
+function initCalendar() {
+    const calendar = document.querySelector('.calendar-grid');
+    if (!calendar) return;
+
+    let html = '';
+    for (let day = 1; day <= 30; day++) {
+        const isCompleted = day <= 3;
+        const isActive = day === 3;
+        html += `
+            <div class="calendar-day 
+                ${isCompleted ? 'completed' : ''} 
+                ${isActive ? 'active' : ''}">
+                ${day}
+            </div>`;
     }
+    calendar.innerHTML = html;
+}
+
+function initProgressTracker() {
+    const toggle = document.querySelector('.toggle-switch input');
+    if (!toggle) return;
+
+    toggle.addEventListener('change', function() {
+        if (this.checked) {
+            updateProgress();
+        }
+    });
 }
 
 function updateProgress() {
     const completedDays = document.querySelectorAll('.calendar-day.completed').length;
-    const progressBar = document.querySelector('.progress-bar');
-    const progressText = document.querySelector('.progress-details span:last-child');
+    const progress = Math.round((completedDays / 30) * 100);
     
-    if (progressBar && progressText) {
-        const progress = Math.round((completedDays / 30) * 100);
+    const progressBar = document.querySelector('.progress-bar');
+    if (progressBar) {
         progressBar.style.width = `${progress}%`;
+    }
+    
+    const progressText = document.querySelector('.progress-details span:last-child');
+    if (progressText) {
         progressText.textContent = `${progress}% complété`;
     }
-}
-
-function generateCalendar() {
-    const grid = document.querySelector('.calendar-grid');
-    if (!grid) return;
-    
-    let html = '';
-    for (let i = 1; i <= 30; i++) {
-        const completed = i <= 3 ? 'completed' : '';
-        const active = i === 3 ? 'active' : '';
-        html += `<div class="calendar-day ${completed} ${active}">${i}</div>`;
-    }
-    grid.innerHTML = html;
 }
