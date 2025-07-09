@@ -1,70 +1,51 @@
-<<<<<<< HEAD
-// Gestion de la progression
+// Initialisation de FitTrack Pro
 document.addEventListener('DOMContentLoaded', function() {
-    const toggleSwitch = document.querySelector('.toggle-switch input');
+    console.log('FitTrack Pro initialisé');
     
+    // Gestion du toggle switch
+    const toggleSwitch = document.querySelector('.toggle-switch input');
     if (toggleSwitch) {
         toggleSwitch.addEventListener('change', function() {
             if(this.checked) {
-                // Marquer le jour comme complété
-                const activeDay = document.querySelector('.calendar-day.active');
-                if (activeDay) {
-                    activeDay.classList.add('completed');
-                    activeDay.classList.remove('active');
-                }
-                
-                // Mise à jour de la progression
+                markDayCompleted();
                 updateProgress();
             }
         });
     }
 
-    function updateProgress() {
-        const completedDays = document.querySelectorAll('.calendar-day.completed').length;
-        const progressBar = document.querySelector('.progress-bar');
-        const progressText = document.querySelector('.progress-details span:last-child');
-        
-        if (progressBar && progressText) {
-            const progress = (completedDays / 30) * 100;
-            progressBar.style.width = `${progress}%`;
-            progressText.textContent = `${Math.round(progress)}% complété`;
-        }
-    }
+    // Génération du calendrier
+    generateCalendar();
 });
 
-=======
-// Gestion de la progression
-document.addEventListener('DOMContentLoaded', function() {
-    const toggleSwitch = document.querySelector('.toggle-switch input');
+function markDayCompleted() {
+    const activeDay = document.querySelector('.calendar-day.active');
+    if (activeDay) {
+        activeDay.classList.add('completed');
+        activeDay.classList.remove('active');
+    }
+}
+
+function updateProgress() {
+    const completedDays = document.querySelectorAll('.calendar-day.completed').length;
+    const progressBar = document.querySelector('.progress-bar');
+    const progressText = document.querySelector('.progress-details span:last-child');
     
-    if (toggleSwitch) {
-        toggleSwitch.addEventListener('change', function() {
-            if(this.checked) {
-                // Marquer le jour comme complété
-                const activeDay = document.querySelector('.calendar-day.active');
-                if (activeDay) {
-                    activeDay.classList.add('completed');
-                    activeDay.classList.remove('active');
-                }
-                
-                // Mise à jour de la progression
-                updateProgress();
-            }
-        });
+    if (progressBar && progressText) {
+        const progress = Math.round((completedDays / 30) * 100);
+        progressBar.style.width = `${progress}%`;
+        progressText.textContent = `${progress}% complété`;
     }
+}
 
-    function updateProgress() {
-        const completedDays = document.querySelectorAll('.calendar-day.completed').length;
-        const progressBar = document.querySelector('.progress-bar');
-        const progressText = document.querySelector('.progress-details span:last-child');
-        
-        if (progressBar && progressText) {
-            const progress = (completedDays / 30) * 100;
-            progressBar.style.width = `${progress}%`;
-            progressText.textContent = `${Math.round(progress)}% complété`;
-        }
+function generateCalendar() {
+    const grid = document.querySelector('.calendar-grid');
+    if (!grid) return;
+    
+    let html = '';
+    for (let i = 1; i <= 30; i++) {
+        const completed = i <= 3 ? 'completed' : '';
+        const active = i === 3 ? 'active' : '';
+        html += `<div class="calendar-day ${completed} ${active}">${i}</div>`;
     }
-});
-
->>>>>>> 9cc73b39f4a320db21214596a60f52a96917a7b2
-// Ajoutez ici d'autres fonctions si nécessaire
+    grid.innerHTML = html;
+}

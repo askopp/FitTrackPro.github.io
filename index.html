@@ -4,20 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#4361ee">
+    <!-- Balises PWA corrigées -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+<!-- Conservation pour compatibilité iOS -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+    
     <title>FitTrack Pro - Votre Coach Personnel</title>
     
     <!-- Polices et icônes -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     
-    <!-- Fichiers locaux -->
-    <link rel="stylesheet" href="./css/style.css?v=3.0">
+    <!-- Fichiers locaux CORRIGÉS -->
+    <link rel="stylesheet" href="./css/style.css?v=4.0">
     <link rel="manifest" href="./manifest.json">
     <link rel="icon" href="./images/favicon.ico">
-    
-    <!-- iOS PWA -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 </head>
 <body>
     <div class="app-container">
@@ -78,8 +80,8 @@
             <!-- Calendrier -->
             <section class="calendar-section">
                 <h3><i class="fas fa-calendar-alt"></i> Suivi Mensuel</h3>
-                <div class="calendar-grid">
-                    <!-- Jours seront générés par JavaScript -->
+                <div class="calendar-grid" id="calendarGrid">
+                    <!-- Généré par JS -->
                 </div>
             </section>
 
@@ -128,24 +130,27 @@
         </nav>
     </div>
 
-    <!-- Scripts -->
-    <script src="./js/script.js?v=3.0"></script>
+    <!-- Scripts CORRIGÉS -->
+    <script src="./js/script.js?v=4.0"></script>
     <script>
-        // Initialisation
+        // Initialisation garantie sans erreur
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('FitTrack Pro initialisé');
+            console.log('FitTrack Pro - Initialisation réussie');
             
-            // Génération du calendrier
-            const calendarGrid = document.querySelector('.calendar-grid');
-            if(calendarGrid) {
-                // Code pour générer les jours du mois
-                let html = '';
-                for(let i = 1; i <= 30; i++) {
-                    const completed = i <= 3 ? 'completed' : '';
-                    const active = i === 3 ? 'active' : '';
-                    html += `<div class="calendar-day ${completed} ${active}">${i}</div>`;
+            // Génération du calendrier sécurisée
+            try {
+                const grid = document.getElementById('calendarGrid');
+                if(grid) {
+                    let html = '';
+                    for(let i = 1; i <= 30; i++) {
+                        const completed = i <= 3 ? 'completed' : '';
+                        const active = i === 3 ? 'active' : '';
+                        html += `<div class="calendar-day ${completed} ${active}">${i}</div>`;
+                    }
+                    grid.innerHTML = html;
                 }
-                calendarGrid.innerHTML = html;
+            } catch(e) {
+                console.error('Erreur génération calendrier:', e);
             }
         });
     </script>
