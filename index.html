@@ -17,16 +17,18 @@
             --primary: #4361ee;
             --secondary: #3f37c9;
             --accent: #4895ef;
-            --light: #f8f9fa;
-            --dark: #212529;
+            --light: #f0f0f0;
+            --dark: #121212;
+            --button-bg: #ffffff;
         }
         
         body {
             font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: var(--light);
-            color: var(--dark);
+            background-color: var(--dark);
+            color: var(--light);
+            min-height: 100vh;
         }
         
         .app-container {
@@ -42,6 +44,7 @@
             border-radius: 10px;
             margin-bottom: 20px;
             text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
         
         .progress-bar {
@@ -49,6 +52,7 @@
             background-color: var(--accent);
             border-radius: 5px;
             margin: 15px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
         
         .calendar {
@@ -59,16 +63,55 @@
         }
         
         .day {
-            padding: 10px;
+            padding: 15px;
             text-align: center;
-            background: white;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            background-color: var(--button-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            color: var(--dark);
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .day:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 10px rgba(0,0,0,0.2);
+            background-color: #e0f0ff;
+        }
+        
+        .day:active {
+            transform: scale(0.98);
         }
         
         .completed {
             background-color: var(--accent);
             color: white;
+        }
+        
+        .completed:hover {
+            background-color: #5fd3ff;
+        }
+        
+        .active {
+            border: 3px solid var(--primary);
+            box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.5);
+        }
+        
+        /* Effet de profondeur */
+        .day::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 50%);
+            border-radius: 8px;
+            pointer-events: none;
         }
     </style>
 </head>
@@ -106,10 +149,31 @@
             for (let i = 1; i <= 30; i++) {
                 const completed = i <= 3 ? 'completed' : '';
                 const active = i === 3 ? 'active' : '';
-                html += `<div class="day ${completed} ${active}">${i}</div>`;
+                html += `<button class="day ${completed} ${active}">${i}</button>`;
             }
             
             calendar.innerHTML = html;
+            
+            // Ajout des effets interactifs
+            const days = document.querySelectorAll('.day');
+            days.forEach(day => {
+                day.addEventListener('mouseenter', function() {
+                    this.style.transition = 'all 0.2s ease';
+                });
+                
+                day.addEventListener('click', function() {
+                    this.classList.toggle('completed');
+                    updateProgress();
+                });
+            });
+            
+            function updateProgress() {
+                const completedDays = document.querySelectorAll('.day.completed').length;
+                const progress = Math.round((completedDays / 30) * 100);
+                document.querySelector('.progress-bar').style.width = `${progress}%`;
+                document.querySelector('section p:nth-child(3)').textContent = `Jour ${completedDays} sur 30 (${progress}% complété)`;
+            }
+            
             console.log('FitTrack Pro initialisé avec succès');
         });
     </script>
