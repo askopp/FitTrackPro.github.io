@@ -11,7 +11,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     
-    <!-- CSS -->
+    <!-- Animation CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <!-- CSS Personnalisé -->
     <style>
         :root {
             --primary: #4361ee;
@@ -20,6 +23,7 @@
             --light: #f0f0f0;
             --dark: #121212;
             --button-bg: #ffffff;
+            --success: #4cc9f0;
         }
         
         body {
@@ -47,12 +51,51 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
         
+        .duration-selector {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .duration-btn {
+            padding: 10px 20px;
+            background: var(--button-bg);
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .duration-btn:hover {
+            transform: translateY(-3px);
+            background: #e0f0ff;
+            box-shadow: 0 6px 10px rgba(0,0,0,0.2);
+        }
+        
+        .duration-btn.active {
+            background: var(--accent);
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        .progress-container {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
         .progress-bar {
             height: 10px;
             background-color: var(--accent);
             border-radius: 5px;
             margin: 15px 0;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: width 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
         }
         
         .calendar {
@@ -88,94 +131,147 @@
         }
         
         .completed {
-            background-color: var(--accent);
+            background-color: var(--success);
             color: white;
+            animation: bounceIn 0.5s;
         }
         
-        .completed:hover {
-            background-color: #5fd3ff;
-        }
-        
-        .active {
+        .active-day {
             border: 3px solid var(--primary);
             box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.5);
+            animation: pulse 2s infinite;
         }
         
-        /* Effet de profondeur */
-        .day::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 50%);
-            border-radius: 8px;
-            pointer-events: none;
+        /* Animations personnalisées */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(67, 97, 238, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(67, 97, 238, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(67, 97, 238, 0); }
+        }
+        
+        .celebrate {
+            animation: zoomIn 0.5s, tada 1s 0.5s;
         }
     </style>
 </head>
 <body>
     <div class="app-container">
-        <header>
+        <header class="animate__animated animate__fadeInDown">
             <h1><i class="fas fa-dumbbell"></i> FitTrack Pro</h1>
-            <p>Votre programme d'entraînement sur 30 jours</p>
+            <p>Votre programme d'entraînement personnalisé</p>
         </header>
         
         <main>
-            <section>
-                <h2>Votre Progression</h2>
-                <p>Phase 1: Jours 1-10</p>
-                <div class="progress-bar" style="width: 20%"></div>
-                <p>Jour 3 sur 30 (20% complété)</p>
+            <section class="duration-selector animate__animated animate__fadeIn">
+                <button class="duration-btn active" data-days="30">30 Jours</button>
+                <button class="duration-btn" data-days="60">60 Jours</button>
+                <button class="duration-btn" data-days="90">90 Jours</button>
             </section>
             
-            <section>
+            <section class="progress-container">
+                <h2>Votre Progression</h2>
+                <p class="phase-text">Phase 1: Jours 1-10</p>
+                <div class="progress-bar" style="width: 20%"></div>
+                <p class="progress-text">Jour 3 sur <span id="total-days">30</span> (<span id="percent">20</span>% complété)</p>
+            </section>
+            
+            <section class="animate__animated animate__fadeInUp">
                 <h2>Calendrier</h2>
-                <div class="calendar" id="calendar">
-                    <!-- Généré par JavaScript -->
-                </div>
+                <div class="calendar" id="calendar"></div>
             </section>
         </main>
     </div>
 
     <!-- Scripts -->
     <script>
-        // Génération du calendrier
+        // Configuration initiale
+        let totalDays = 30;
+        let currentDay = 3;
+        
+        // Initialisation
         document.addEventListener('DOMContentLoaded', function() {
+            generateCalendar();
+            setupEventListeners();
+            console.log('FitTrack Pro initialisé avec succès');
+        });
+        
+        function generateCalendar() {
             const calendar = document.getElementById('calendar');
-            let html = '';
+            calendar.innerHTML = '';
             
-            for (let i = 1; i <= 30; i++) {
-                const completed = i <= 3 ? 'completed' : '';
-                const active = i === 3 ? 'active' : '';
-                html += `<button class="day ${completed} ${active}">${i}</button>`;
-            }
-            
-            calendar.innerHTML = html;
-            
-            // Ajout des effets interactifs
-            const days = document.querySelectorAll('.day');
-            days.forEach(day => {
-                day.addEventListener('mouseenter', function() {
-                    this.style.transition = 'all 0.2s ease';
-                });
+            for (let i = 1; i <= totalDays; i++) {
+                const dayElement = document.createElement('button');
+                dayElement.className = 'day';
+                dayElement.textContent = i;
                 
-                day.addEventListener('click', function() {
+                if (i <= currentDay) {
+                    dayElement.classList.add('completed');
+                }
+                if (i === currentDay) {
+                    dayElement.classList.add('active-day');
+                }
+                
+                dayElement.addEventListener('click', function() {
                     this.classList.toggle('completed');
                     updateProgress();
                 });
-            });
-            
-            function updateProgress() {
-                const completedDays = document.querySelectorAll('.day.completed').length;
-                const progress = Math.round((completedDays / 30) * 100);
-                document.querySelector('.progress-bar').style.width = `${progress}%`;
-                document.querySelector('section p:nth-child(3)').textContent = `Jour ${completedDays} sur 30 (${progress}% complété)`;
+                
+                calendar.appendChild(dayElement);
             }
             
-            console.log('FitTrack Pro initialisé avec succès');
-        });
+            document.getElementById('total-days').textContent = totalDays;
+            updateProgress();
+        }
+        
+        function setupEventListeners() {
+            // Boutons de durée
+            const durationButtons = document.querySelectorAll('.duration-btn');
+            durationButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    durationButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    this.classList.add('animate__animated', 'animate__pulse');
+                    
+                    setTimeout(() => {
+                        this.classList.remove('animate__animated', 'animate__pulse');
+                    }, 1000);
+                    
+                    totalDays = parseInt(this.dataset.days);
+                    generateCalendar();
+                    
+                    // Animation de célébration
+                    document.querySelector('.progress-container').classList.add('animate__animated', 'animate__rubberBand');
+                    setTimeout(() => {
+                        document.querySelector('.progress-container').classList.remove('animate__animated', 'animate__rubberBand');
+                    }, 1000);
+                });
+            });
+        }
+        
+        function updateProgress() {
+            const completedDays = document.querySelectorAll('.day.completed').length;
+            const percent = Math.round((completedDays / totalDays) * 100);
+            const progressBar = document.querySelector('.progress-bar');
+            
+            // Animation fluide
+            progressBar.style.width = `${percent}%`;
+            document.getElementById('percent').textContent = percent;
+            document.querySelector('.progress-text').textContent = 
+                `Jour ${completedDays} sur ${totalDays} (${percent}% complété)`;
+            
+            // Animation quand objectif atteint
+            if (percent === 100) {
+                document.querySelector('header').classList.add('animate__animated', 'animate__tada');
+                setTimeout(() => {
+                    document.querySelector('header').classList.remove('animate__animated', 'animate__tada');
+                }, 1000);
+            }
+        }
     </script>
 </body>
 </html>
