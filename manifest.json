@@ -4,11 +4,13 @@
   "start_url": "/FitTrackPro.github.io/",
   "scope": "/FitTrackPro.github.io/",
   "display": "standalone",
+  "display_override": ["window-controls-overlay", "borderless"],
   "orientation": "portrait",
   "background_color": "#ffffff",
   "theme_color": "#4361ee",
   "description": "Application de suivi d'entraînement personnel sur 30 jours",
   "lang": "fr-FR",
+  
   "icons": [
     {
       "src": "images/icon-192.png",
@@ -21,14 +23,9 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
-    },
-    {
-      "src": "images/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
     }
   ],
+
   "screenshots": [
     {
       "src": "images/screenshot-1.png",
@@ -37,32 +34,52 @@
       "label": "Page d'accueil FitTrack Pro"
     }
   ],
+
   "features": [
     "Cross Platform",
     "fast",
-    "simple"
+    "simple",
+    "Offline Functionality"
   ],
+
   "categories": [
     "fitness",
     "health",
     "lifestyle"
   ],
+
   "shortcuts": [
     {
       "name": "Démarrer l'entraînement",
+      "short_name": "Entraînement",
       "url": "/FitTrackPro.github.io/?start-workout",
-      "description": "Commencer une nouvelle séance"
+      "description": "Commencer une nouvelle séance",
+      "icons": [
+        {
+          "src": "images/icon-workout.png",
+          "sizes": "96x96"
+        }
+      ]
     },
     {
       "name": "Voir la progression",
+      "short_name": "Progression",
       "url": "/FitTrackPro.github.io/?progress",
       "description": "Consulter vos statistiques"
     }
   ],
+
   "related_applications": [
     {
       "platform": "webapp",
       "url": "https://askopp.github.io/FitTrackPro.github.io/manifest.json"
+    }
+  ],
+
+  "protocol_handlers": [
+    {
+      "protocol": "web+fitrack",
+      "url": "/FitTrackPro.github.io/?action=%s"
     }
   ]
 }
