@@ -3,44 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FitTrack Pro - Votre Coach Sportif</title>
+    <title>FitTrack Pro - Coach Sportif & Nutrition</title>
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    
-    <!-- Polices et icônes -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    
-    <!-- Animation CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    
-    <!-- CSS Personnalisé -->
+
     <style>
         :root {
             --primary: #4361ee;
             --secondary: #3f37c9;
             --accent: #4895ef;
-            --light: #f0f0f0;
-            --dark: #121212;
-            --button-bg: #ffffff;
             --success: #4cc9f0;
+            --warning: #f72585;
+            --light: #f8f9fa;
+            --dark: #121212;
+            --card-bg: #1e1e1e;
         }
-        
+
         body {
             font-family: 'Roboto', sans-serif;
-            margin: 0;
-            padding: 0;
             background-color: var(--dark);
             color: var(--light);
-            min-height: 100vh;
+            margin: 0;
+            padding: 0;
         }
-        
+
         .app-container {
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 20px;
         }
-        
+
         header {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
@@ -50,112 +44,128 @@
             text-align: center;
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
-        
-        .duration-selector {
+
+        /* Navigation par onglets */
+        .tab-container {
             display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin: 20px 0;
+            margin-bottom: 20px;
         }
-        
-        .duration-btn {
-            padding: 10px 20px;
-            background: var(--button-bg);
+
+        .tab {
+            padding: 12px 20px;
+            background: var(--card-bg);
             border: none;
-            border-radius: 50px;
-            font-weight: bold;
+            color: var(--light);
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            font-weight: bold;
+            border-radius: 5px 5px 0 0;
+            margin-right: 5px;
         }
-        
-        .duration-btn:hover {
-            transform: translateY(-3px);
-            background: #e0f0ff;
-            box-shadow: 0 6px 10px rgba(0,0,0,0.2);
+
+        .tab.active {
+            background: var(--primary);
         }
-        
-        .duration-btn.active {
-            background: var(--accent);
-            color: white;
-            transform: translateY(-3px);
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s;
         }
-        
-        .progress-container {
-            background: rgba(255,255,255,0.1);
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-            animation: fadeIn 0.5s ease-out;
+
+        .tab-content.active {
+            display: block;
         }
-        
-        .progress-bar {
-            height: 10px;
-            background-color: var(--accent);
-            border-radius: 5px;
-            margin: 15px 0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            transition: width 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-        }
-        
+
+        /* Section Entraînement */
         .calendar {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             gap: 10px;
             margin: 20px 0;
         }
-        
+
         .day {
             padding: 15px;
-            text-align: center;
-            background-color: var(--button-bg);
+            background: var(--card-bg);
             border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            color: var(--dark);
-            font-weight: bold;
+            text-align: center;
             cursor: pointer;
-            transition: all 0.3s ease;
-            border: none;
+            transition: all 0.3s;
             position: relative;
-            overflow: hidden;
+            border: 2px solid transparent;
         }
-        
-        .day:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 10px rgba(0,0,0,0.2);
-            background-color: #e0f0ff;
-        }
-        
-        .day:active {
-            transform: scale(0.98);
-        }
-        
-        .completed {
-            background-color: var(--success);
-            color: white;
-            animation: bounceIn 0.5s;
-        }
-        
-        .active-day {
-            border: 3px solid var(--primary);
-            box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.5);
+
+        .day.today {
+            border-color: var(--accent);
             animation: pulse 2s infinite;
         }
-        
-        /* Animations personnalisées */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+
+        .day.completed {
+            background: var(--success);
+            color: white;
         }
-        
+
+        .progress-container {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 5px;
+            margin: 10px 0;
+            transition: width 0.5s ease;
+        }
+
+        /* Section Nutrition */
+        .nutrition-container {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .meal-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .nutrient-progress {
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            margin: 5px 0;
+        }
+
+        .nutrient-progress span {
+            display: block;
+            height: 100%;
+            border-radius: 4px;
+        }
+
+        .protein { background: #4cc9f0; }
+        .carbs { background: #4895ef; }
+        .fat { background: #f72585; }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
         @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(67, 97, 238, 0.7); }
+            0% { box-shadow: 0 0 0 0 rgba(67, 97, 238, 0.4); }
             70% { box-shadow: 0 0 0 10px rgba(67, 97, 238, 0); }
             100% { box-shadow: 0 0 0 0 rgba(67, 97, 238, 0); }
         }
-        
-        .celebrate {
-            animation: zoomIn 0.5s, tada 1s 0.5s;
+
+        @keyframes bounceIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
     </style>
 </head>
@@ -163,114 +173,214 @@
     <div class="app-container">
         <header class="animate__animated animate__fadeInDown">
             <h1><i class="fas fa-dumbbell"></i> FitTrack Pro</h1>
-            <p>Votre programme d'entraînement personnalisé</p>
+            <p id="current-date">Chargement de la date...</p>
         </header>
-        
-        <main>
-            <section class="duration-selector animate__animated animate__fadeIn">
-                <button class="duration-btn active" data-days="30">30 Jours</button>
-                <button class="duration-btn" data-days="60">60 Jours</button>
-                <button class="duration-btn" data-days="90">90 Jours</button>
-            </section>
-            
-            <section class="progress-container">
-                <h2>Votre Progression</h2>
-                <p class="phase-text">Phase 1: Jours 1-10</p>
-                <div class="progress-bar" style="width: 20%"></div>
-                <p class="progress-text">Jour 3 sur <span id="total-days">30</span> (<span id="percent">20</span>% complété)</p>
-            </section>
-            
-            <section class="animate__animated animate__fadeInUp">
-                <h2>Calendrier</h2>
+
+        <div class="tab-container">
+            <button class="tab active" data-tab="training">Entraînement</button>
+            <button class="tab" data-tab="nutrition">Nutrition</button>
+        </div>
+
+        <!-- Onglet Entraînement -->
+        <div id="training" class="tab-content active">
+            <div class="progress-container animate__animated animate__fadeIn">
+                <h2><i class="fas fa-chart-line"></i> Votre Progression</h2>
+                <p id="program-phase">Phase 1: Jours 1-30</p>
+                <div class="progress-bar" id="progress-bar" style="width: 10%"></div>
+                <p id="progress-text">Jour 3 sur 30 (10% complété)</p>
+            </div>
+
+            <div class="animate__animated animate__fadeInUp">
+                <h2><i class="fas fa-calendar-alt"></i> Calendrier</h2>
                 <div class="calendar" id="calendar"></div>
-            </section>
-        </main>
+            </div>
+        </div>
+
+        <!-- Onglet Nutrition -->
+        <div id="nutrition" class="tab-content">
+            <div class="nutrition-container animate__animated animate__fadeIn">
+                <h2><i class="fas fa-utensils"></i> Suivi Nutritionnel</h2>
+                <p id="nutrition-date">Aujourd'hui</p>
+                
+                <div class="nutrition-stats">
+                    <h3>Objectifs Journaliers</h3>
+                    <div class="nutrient">
+                        <p>Protéines <span id="protein-amount">0g</span>/<span id="protein-goal">150g</span></p>
+                        <div class="nutrient-progress"><span class="protein" style="width: 0%"></span></div>
+                    </div>
+                    <div class="nutrient">
+                        <p>Glucides <span id="carbs-amount">0g</span>/<span id="carbs-goal">200g</span></p>
+                        <div class="nutrient-progress"><span class="carbs" style="width: 0%"></span></div>
+                    </div>
+                    <div class="nutrient">
+                        <p>Lipides <span id="fat-amount">0g</span>/<span id="fat-goal">70g</span></p>
+                        <div class="nutrient-progress"><span class="fat" style="width: 0%"></span></div>
+                    </div>
+                </div>
+
+                <div class="meals-container">
+                    <h3>Repas du Jour</h3>
+                    <div class="meal-card">
+                        <h4>Petit-déjeuner</h4>
+                        <div class="meal-items" id="breakfast-items"></div>
+                        <button class="add-food-btn">+ Ajouter un aliment</button>
+                    </div>
+                    <!-- Répéter pour déjeuner, dîner, collations -->
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- Scripts -->
     <script>
-        // Configuration initiale
-        let totalDays = 30;
-        let currentDay = 3;
-        
+        // Données de l'application
+        const appData = {
+            startDate: new Date(), // Date de début du programme
+            currentDay: 1,
+            programDuration: 30,
+            nutritionGoals: {
+                protein: 150,
+                carbs: 200,
+                fat: 70
+            },
+            todayMeals: {
+                breakfast: [],
+                lunch: [],
+                dinner: [],
+                snacks: []
+            }
+        };
+
         // Initialisation
         document.addEventListener('DOMContentLoaded', function() {
-            generateCalendar();
-            setupEventListeners();
-            console.log('FitTrack Pro initialisé avec succès');
+            initTabs();
+            initCalendar();
+            initNutrition();
+            updateCurrentDate();
+            
+            console.log('FitTrack Pro initialisé');
         });
-        
-        function generateCalendar() {
+
+        function initTabs() {
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Désactiver tous les onglets
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    
+                    // Activer l'onglet sélectionné
+                    this.classList.add('active');
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+        }
+
+        function updateCurrentDate() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('current-date').textContent = now.toLocaleDateString('fr-FR', options);
+            document.getElementById('nutrition-date').textContent = "Nutrition pour " + now.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+        }
+
+        function initCalendar() {
+            const now = new Date();
+            const startDate = new Date(now);
+            startDate.setDate(now.getDate() - appData.currentDay + 1);
+            appData.startDate = startDate;
+            
             const calendar = document.getElementById('calendar');
             calendar.innerHTML = '';
             
-            for (let i = 1; i <= totalDays; i++) {
-                const dayElement = document.createElement('button');
-                dayElement.className = 'day';
-                dayElement.textContent = i;
+            // Générer les jours du mois en cours
+            for (let i = 0; i < appData.programDuration; i++) {
+                const dayDate = new Date(startDate);
+                dayDate.setDate(startDate.getDate() + i);
                 
-                if (i <= currentDay) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'day';
+                dayElement.textContent = dayDate.getDate();
+                
+                // Marquer le jour actuel
+                if (i === appData.currentDay - 1) {
+                    dayElement.classList.add('today');
+                }
+                
+                // Marquer les jours passés comme complétés
+                if (i < appData.currentDay - 1) {
                     dayElement.classList.add('completed');
                 }
-                if (i === currentDay) {
-                    dayElement.classList.add('active-day');
-                }
-                
-                dayElement.addEventListener('click', function() {
-                    this.classList.toggle('completed');
-                    updateProgress();
-                });
                 
                 calendar.appendChild(dayElement);
             }
             
-            document.getElementById('total-days').textContent = totalDays;
             updateProgress();
         }
-        
-        function setupEventListeners() {
-            // Boutons de durée
-            const durationButtons = document.querySelectorAll('.duration-btn');
-            durationButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    durationButtons.forEach(btn => btn.classList.remove('active'));
-                    this.classList.add('active');
-                    this.classList.add('animate__animated', 'animate__pulse');
-                    
-                    setTimeout(() => {
-                        this.classList.remove('animate__animated', 'animate__pulse');
-                    }, 1000);
-                    
-                    totalDays = parseInt(this.dataset.days);
-                    generateCalendar();
-                    
-                    // Animation de célébration
-                    document.querySelector('.progress-container').classList.add('animate__animated', 'animate__rubberBand');
-                    setTimeout(() => {
-                        document.querySelector('.progress-container').classList.remove('animate__animated', 'animate__rubberBand');
-                    }, 1000);
+
+        function updateProgress() {
+            const progressPercent = Math.round((appData.currentDay / appData.programDuration) * 100);
+            document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+            document.getElementById('progress-text').textContent = 
+                `Jour ${appData.currentDay} sur ${appData.programDuration} (${progressPercent}% complété)`;
+            
+            // Mettre à jour la phase du programme
+            const phase = Math.ceil(appData.currentDay / 10);
+            document.getElementById('program-phase').textContent = `Phase ${phase}: Jours ${((phase-1)*10)+1}-${phase*10}`;
+        }
+
+        function initNutrition() {
+            updateNutritionProgress();
+            
+            // Exemple d'ajout d'aliments
+            addFoodItem('breakfast', 'Oeufs', 6, 0, 5);
+            addFoodItem('lunch', 'Poulet grillé', 30, 0, 3);
+            addFoodItem('dinner', 'Saumon', 20, 0, 8);
+        }
+
+        function addFoodItem(meal, name, protein, carbs, fat) {
+            const food = { name, protein, carbs, fat };
+            appData.todayMeals[meal].push(food);
+            updateNutritionProgress();
+            
+            // Ajouter visuellement
+            const mealContainer = document.getElementById(`${meal}-items`);
+            if (mealContainer) {
+                const foodElement = document.createElement('div');
+                foodElement.className = 'food-item animate__animated animate__bounceIn';
+                foodElement.innerHTML = `
+                    <p>${name} <span>${protein}g P / ${carbs}g G / ${fat}g L</span></p>
+                `;
+                mealContainer.appendChild(foodElement);
+            }
+        }
+
+        function updateNutritionProgress() {
+            // Calculer les totaux
+            let totalProtein = 0;
+            let totalCarbs = 0;
+            let totalFat = 0;
+            
+            Object.values(appData.todayMeals).forEach(meal => {
+                meal.forEach(food => {
+                    totalProtein += food.protein;
+                    totalCarbs += food.carbs;
+                    totalFat += food.fat;
                 });
             });
-        }
-        
-        function updateProgress() {
-            const completedDays = document.querySelectorAll('.day.completed').length;
-            const percent = Math.round((completedDays / totalDays) * 100);
-            const progressBar = document.querySelector('.progress-bar');
             
-            // Animation fluide
-            progressBar.style.width = `${percent}%`;
-            document.getElementById('percent').textContent = percent;
-            document.querySelector('.progress-text').textContent = 
-                `Jour ${completedDays} sur ${totalDays} (${percent}% complété)`;
+            // Mettre à jour l'interface
+            document.getElementById('protein-amount').textContent = totalProtein;
+            document.getElementById('carbs-amount').textContent = totalCarbs;
+            document.getElementById('fat-amount').textContent = totalFat;
             
-            // Animation quand objectif atteint
-            if (percent === 100) {
-                document.querySelector('header').classList.add('animate__animated', 'animate__tada');
-                setTimeout(() => {
-                    document.querySelector('header').classList.remove('animate__animated', 'animate__tada');
-                }, 1000);
-            }
+            // Mettre à jour les barres de progression
+            const proteinPercent = Math.min(100, (totalProtein / appData.nutritionGoals.protein) * 100);
+            const carbsPercent = Math.min(100, (totalCarbs / appData.nutritionGoals.carbs) * 100);
+            const fatPercent = Math.min(100, (totalFat / appData.nutritionGoals.fat) * 100);
+            
+            document.querySelector('.protein').style.width = `${proteinPercent}%`;
+            document.querySelector('.carbs').style.width = `${carbsPercent}%`;
+            document.querySelector('.fat').style.width = `${fatPercent}%`;
         }
     </script>
 </body>
