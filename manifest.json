@@ -1,42 +1,68 @@
-<<<<<<< HEAD
 {
   "name": "FitTrack Pro",
   "short_name": "FitTrack",
-  "start_url": "/index.html",
+  "start_url": "/FitTrackPro.github.io/",
+  "scope": "/FitTrackPro.github.io/",
   "display": "standalone",
-  "background_color": "#4361ee",
-  "theme_color": "#3f37c9",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#4361ee",
+  "description": "Application de suivi d'entraînement personnel sur 30 jours",
+  "lang": "fr-FR",
   "icons": [
     {
       "src": "images/icon-192.png",
+      "sizes": "192x192",
       "type": "image/png",
-      "sizes": "192x192"
+      "purpose": "any maskable"
     },
     {
       "src": "images/icon-512.png",
+      "sizes": "512x512",
       "type": "image/png",
-      "sizes": "512x512"
-    }
-  ]
-=======
-{
-  "name": "FitTrack Pro",
-  "short_name": "FitTrack",
-  "start_url": "/index.html",
-  "display": "standalone",
-  "background_color": "#4361ee",
-  "theme_color": "#3f37c9",
-  "icons": [
-    {
-      "src": "images/icon-192.png",
-      "type": "image/png",
-      "sizes": "192x192"
+      "purpose": "any maskable"
     },
     {
       "src": "images/icon-512.png",
+      "sizes": "512x512",
       "type": "image/png",
-      "sizes": "512x512"
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "images/screenshot-1.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "label": "Page d'accueil FitTrack Pro"
+    }
+  ],
+  "features": [
+    "Cross Platform",
+    "fast",
+    "simple"
+  ],
+  "categories": [
+    "fitness",
+    "health",
+    "lifestyle"
+  ],
+  "shortcuts": [
+    {
+      "name": "Démarrer l'entraînement",
+      "url": "/FitTrackPro.github.io/?start-workout",
+      "description": "Commencer une nouvelle séance"
+    },
+    {
+      "name": "Voir la progression",
+      "url": "/FitTrackPro.github.io/?progress",
+      "description": "Consulter vos statistiques"
+    }
+  ],
+  "related_applications": [
+    {
+      "platform": "webapp",
+      "url": "https://askopp.github.io/FitTrackPro.github.io/manifest.json"
     }
   ]
->>>>>>> 9cc73b39f4a320db21214596a60f52a96917a7b2
 }
