@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FitTrack Pro - Coach Sportif & Nutrition</title>
+    <title>FitTrack Pro - Suivi Fitness & Nutrition</title>
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
@@ -19,6 +20,7 @@
             --light: #f8f9fa;
             --dark: #121212;
             --card-bg: #1e1e1e;
+            --input-bg: #2a2a2a;
         }
 
         body {
@@ -27,6 +29,7 @@
             color: var(--light);
             margin: 0;
             padding: 0;
+            line-height: 1.6;
         }
 
         .app-container {
@@ -45,10 +48,10 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
 
-        /* Navigation par onglets */
         .tab-container {
             display: flex;
             margin-bottom: 20px;
+            gap: 5px;
         }
 
         .tab {
@@ -60,7 +63,6 @@
             transition: all 0.3s;
             font-weight: bold;
             border-radius: 5px 5px 0 0;
-            margin-right: 5px;
         }
 
         .tab.active {
@@ -105,6 +107,17 @@
             color: white;
         }
 
+        .day.past {
+            background-color: #2a2a2a;
+            color: #666;
+            opacity: 0.8;
+        }
+
+        .day.past:hover {
+            opacity: 1;
+            transform: scale(1.02);
+        }
+
         .progress-container {
             background: var(--card-bg);
             padding: 20px;
@@ -127,11 +140,63 @@
             border-radius: 10px;
         }
 
-        .meal-card {
+        .user-profile {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .profile-card {
             background: rgba(255,255,255,0.05);
-            border-radius: 8px;
             padding: 15px;
+            border-radius: 8px;
+        }
+
+        .input-group {
             margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 10px;
+            background: var(--input-bg);
+            border: 1px solid #444;
+            border-radius: 5px;
+            color: var(--light);
+        }
+
+        .bodyfat-images {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .bodyfat-option {
+            cursor: pointer;
+            border: 2px solid transparent;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .bodyfat-option:hover {
+            transform: scale(1.05);
+        }
+
+        .bodyfat-option.selected {
+            border-color: var(--accent);
+        }
+
+        .bodyfat-option img {
+            width: 100%;
+            border-radius: 5px;
         }
 
         .nutrient-progress {
@@ -150,6 +215,55 @@
         .protein { background: #4cc9f0; }
         .carbs { background: #4895ef; }
         .fat { background: #f72585; }
+
+        /* Historique */
+        .workout-history {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .workout-card {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .workout-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .workout-date {
+            color: var(--accent);
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        /* Modale */
+        .day-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+            animation: fadeIn 0.3s;
+        }
 
         /* Animations */
         @keyframes fadeIn {
@@ -179,6 +293,7 @@
         <div class="tab-container">
             <button class="tab active" data-tab="training">Entraînement</button>
             <button class="tab" data-tab="nutrition">Nutrition</button>
+            <button class="tab" data-tab="history">Historique</button>
         </div>
 
         <!-- Onglet Entraînement -->
@@ -202,6 +317,64 @@
                 <h2><i class="fas fa-utensils"></i> Suivi Nutritionnel</h2>
                 <p id="nutrition-date">Aujourd'hui</p>
                 
+                <div class="user-profile">
+                    <div class="profile-card">
+                        <h3><i class="fas fa-user"></i> Profil</h3>
+                        <div class="input-group">
+                            <label for="weight">Poids (kg)</label>
+                            <input type="number" id="weight" placeholder="Ex: 70">
+                        </div>
+                        <div class="input-group">
+                            <label for="height">Taille (cm)</label>
+                            <input type="number" id="height" placeholder="Ex: 175">
+                        </div>
+                        <div class="input-group">
+                            <label>Niveau de graisse corporelle</label>
+                            <div class="bodyfat-images">
+                                <div class="bodyfat-option" data-level="low">
+                                    <img src="https://via.placeholder.com/100x150/4cc9f0/ffffff?text=Faible" alt="Faible graisse">
+                                    <p>Faible</p>
+                                </div>
+                                <div class="bodyfat-option" data-level="medium">
+                                    <img src="https://via.placeholder.com/100x150/4895ef/ffffff?text=Moyen" alt="Moyenne graisse">
+                                    <p>Moyen</p>
+                                </div>
+                                <div class="bodyfat-option" data-level="high">
+                                    <img src="https://via.placeholder.com/100x150/f72585/ffffff?text=Élevé" alt="Élevée graisse">
+                                    <p>Élevé</p>
+                                </div>
+                            </div>
+                        </div>
+                        <button id="save-profile" class="save-btn">Enregistrer</button>
+                    </div>
+
+                    <div class="profile-card">
+                        <h3><i class="fas fa-bullseye"></i> Objectifs</h3>
+                        <div class="input-group">
+                            <label for="goal">Objectif principal</label>
+                            <select id="goal">
+                                <option value="loss">Perte de graisse</option>
+                                <option value="muscle">Prise de muscle</option>
+                                <option value="maintenance">Maintien</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="activity">Niveau d'activité</label>
+                            <select id="activity">
+                                <option value="sedentary">Sédentaire</option>
+                                <option value="light">Léger</option>
+                                <option value="moderate">Modéré</option>
+                                <option value="active">Actif</option>
+                                <option value="very-active">Très actif</option>
+                            </select>
+                        </div>
+                        <div id="calorie-goal" class="input-group">
+                            <label>Apport calorique recommandé</label>
+                            <p class="result">2000 kcal/jour</p>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="nutrition-stats">
                     <h3>Objectifs Journaliers</h3>
                     <div class="nutrient">
@@ -225,19 +398,60 @@
                         <div class="meal-items" id="breakfast-items"></div>
                         <button class="add-food-btn">+ Ajouter un aliment</button>
                     </div>
-                    <!-- Répéter pour déjeuner, dîner, collations -->
+                    <div class="meal-card">
+                        <h4>Déjeuner</h4>
+                        <div class="meal-items" id="lunch-items"></div>
+                        <button class="add-food-btn">+ Ajouter un aliment</button>
+                    </div>
+                    <div class="meal-card">
+                        <h4>Dîner</h4>
+                        <div class="meal-items" id="dinner-items"></div>
+                        <button class="add-food-btn">+ Ajouter un aliment</button>
+                    </div>
                 </div>
             </div>
+        </div>
+
+        <!-- Onglet Historique -->
+        <div id="history" class="tab-content">
+            <div class="nutrition-container animate__animated animate__fadeIn">
+                <h2><i class="fas fa-history"></i> Historique Complet</h2>
+                <div class="workout-history" id="workout-history"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modale Jour -->
+    <div id="day-modal" class="day-modal">
+        <div class="modal-content">
+            <h3 id="modal-day-title">Jour 1</h3>
+            <div class="modal-section">
+                <h4><i class="fas fa-dumbbell"></i> Entraînement</h4>
+                <div id="modal-workout-data"></div>
+            </div>
+            <div class="modal-section">
+                <h4><i class="fas fa-utensils"></i> Nutrition</h4>
+                <div id="modal-nutrition-data"></div>
+            </div>
+            <button id="close-modal">Fermer</button>
         </div>
     </div>
 
     <script>
         // Données de l'application
         const appData = {
-            startDate: new Date(), // Date de début du programme
-            currentDay: 1,
+            startDate: new Date(),
+            currentDay: 3,
             programDuration: 30,
+            userProfile: {
+                weight: null,
+                height: null,
+                bodyFat: null,
+                goal: 'loss',
+                activity: 'moderate'
+            },
             nutritionGoals: {
+                calories: 2000,
                 protein: 150,
                 carbs: 200,
                 fat: 70
@@ -247,7 +461,8 @@
                 lunch: [],
                 dinner: [],
                 snacks: []
-            }
+            },
+            workoutHistory: {}
         };
 
         // Initialisation
@@ -255,7 +470,9 @@
             initTabs();
             initCalendar();
             initNutrition();
+            initWorkoutHistory();
             updateCurrentDate();
+            loadUserProfile();
             
             console.log('FitTrack Pro initialisé');
         });
@@ -264,11 +481,9 @@
             const tabs = document.querySelectorAll('.tab');
             tabs.forEach(tab => {
                 tab.addEventListener('click', function() {
-                    // Désactiver tous les onglets
                     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
                     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
                     
-                    // Activer l'onglet sélectionné
                     this.classList.add('active');
                     const tabId = this.getAttribute('data-tab');
                     document.getElementById(tabId).classList.add('active');
@@ -292,7 +507,6 @@
             const calendar = document.getElementById('calendar');
             calendar.innerHTML = '';
             
-            // Générer les jours du mois en cours
             for (let i = 0; i < appData.programDuration; i++) {
                 const dayDate = new Date(startDate);
                 dayDate.setDate(startDate.getDate() + i);
@@ -300,16 +514,17 @@
                 const dayElement = document.createElement('div');
                 dayElement.className = 'day';
                 dayElement.textContent = dayDate.getDate();
+                dayElement.dataset.day = i + 1;
                 
-                // Marquer le jour actuel
                 if (i === appData.currentDay - 1) {
                     dayElement.classList.add('today');
+                } else if (i < appData.currentDay - 1) {
+                    dayElement.classList.add('past', 'completed');
                 }
                 
-                // Marquer les jours passés comme complétés
-                if (i < appData.currentDay - 1) {
-                    dayElement.classList.add('completed');
-                }
+                dayElement.addEventListener('click', function() {
+                    showDayData(parseInt(this.dataset.day));
+                });
                 
                 calendar.appendChild(dayElement);
             }
@@ -323,39 +538,111 @@
             document.getElementById('progress-text').textContent = 
                 `Jour ${appData.currentDay} sur ${appData.programDuration} (${progressPercent}% complété)`;
             
-            // Mettre à jour la phase du programme
             const phase = Math.ceil(appData.currentDay / 10);
             document.getElementById('program-phase').textContent = `Phase ${phase}: Jours ${((phase-1)*10)+1}-${phase*10}`;
         }
 
         function initNutrition() {
+            // Écouteurs pour les options de graisse corporelle
+            document.querySelectorAll('.bodyfat-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.bodyfat-option').forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    appData.userProfile.bodyFat = this.dataset.level;
+                });
+            });
+
+            // Sauvegarde du profil
+            document.getElementById('save-profile').addEventListener('click', saveUserProfile);
+
+            // Calcul des objectifs
+            document.getElementById('goal').addEventListener('change', updateNutritionGoals);
+            document.getElementById('activity').addEventListener('change', updateNutritionGoals);
+
             updateNutritionProgress();
-            
-            // Exemple d'ajout d'aliments
-            addFoodItem('breakfast', 'Oeufs', 6, 0, 5);
-            addFoodItem('lunch', 'Poulet grillé', 30, 0, 3);
-            addFoodItem('dinner', 'Saumon', 20, 0, 8);
         }
 
-        function addFoodItem(meal, name, protein, carbs, fat) {
-            const food = { name, protein, carbs, fat };
-            appData.todayMeals[meal].push(food);
-            updateNutritionProgress();
+        function loadUserProfile() {
+            const savedProfile = localStorage.getItem('fitTrackProfile');
+            if (savedProfile) {
+                appData.userProfile = JSON.parse(savedProfile);
+                
+                // Mettre à jour l'interface
+                document.getElementById('weight').value = appData.userProfile.weight || '';
+                document.getElementById('height').value = appData.userProfile.height || '';
+                document.getElementById('goal').value = appData.userProfile.goal;
+                document.getElementById('activity').value = appData.userProfile.activity;
+                
+                if (appData.userProfile.bodyFat) {
+                    document.querySelector(`.bodyfat-option[data-level="${appData.userProfile.bodyFat}"]`).classList.add('selected');
+                }
+                
+                updateNutritionGoals();
+            }
+        }
+
+        function saveUserProfile() {
+            appData.userProfile = {
+                weight: parseFloat(document.getElementById('weight').value),
+                height: parseFloat(document.getElementById('height').value),
+                bodyFat: appData.userProfile.bodyFat,
+                goal: document.getElementById('goal').value,
+                activity: document.getElementById('activity').value
+            };
             
-            // Ajouter visuellement
-            const mealContainer = document.getElementById(`${meal}-items`);
-            if (mealContainer) {
-                const foodElement = document.createElement('div');
-                foodElement.className = 'food-item animate__animated animate__bounceIn';
-                foodElement.innerHTML = `
-                    <p>${name} <span>${protein}g P / ${carbs}g G / ${fat}g L</span></p>
-                `;
-                mealContainer.appendChild(foodElement);
+            localStorage.setItem('fitTrackProfile', JSON.stringify(appData.userProfile));
+            updateNutritionGoals();
+            
+            // Feedback visuel
+            const btn = document.getElementById('save-profile');
+            btn.textContent = '✓ Enregistré';
+            setTimeout(() => {
+                btn.textContent = 'Enregistrer';
+            }, 2000);
+        }
+
+        function updateNutritionGoals() {
+            // Calcul simplifié des besoins caloriques (formule Harris-Benedict)
+            if (appData.userProfile.weight && appData.userProfile.height) {
+                let bmr;
+                if (appData.userProfile.bodyFat === 'high') {
+                    bmr = 10 * appData.userProfile.weight + 6.25 * appData.userProfile.height - 5 * 30 + 5;
+                } else {
+                    bmr = 10 * appData.userProfile.weight + 6.25 * appData.userProfile.height - 5 * 25 + 5;
+                }
+                
+                // Facteur d'activité
+                const activityFactors = {
+                    'sedentary': 1.2,
+                    'light': 1.375,
+                    'moderate': 1.55,
+                    'active': 1.725,
+                    'very-active': 1.9
+                };
+                
+                let tdee = bmr * activityFactors[appData.userProfile.activity];
+                
+                // Ajustement selon l'objectif
+                if (appData.userProfile.goal === 'loss') {
+                    tdee *= 0.85; // Réduction de 15% pour la perte de poids
+                } else if (appData.userProfile.goal === 'muscle') {
+                    tdee *= 1.15; // Augmentation de 15% pour la prise de muscle
+                }
+                
+                appData.nutritionGoals.calories = Math.round(tdee);
+                appData.nutritionGoals.protein = Math.round(appData.userProfile.weight * 2.2);
+                appData.nutritionGoals.carbs = Math.round((appData.nutritionGoals.calories * 0.4) / 4);
+                appData.nutritionGoals.fat = Math.round((appData.nutritionGoals.calories * 0.25) / 9);
+                
+                document.querySelector('#calorie-goal .result').textContent = 
+                    `${appData.nutritionGoals.calories} kcal/jour`;
+                document.getElementById('protein-goal').textContent = appData.nutritionGoals.protein;
+                document.getElementById('carbs-goal').textContent = appData.nutritionGoals.carbs;
+                document.getElementById('fat-goal').textContent = appData.nutritionGoals.fat;
             }
         }
 
         function updateNutritionProgress() {
-            // Calculer les totaux
             let totalProtein = 0;
             let totalCarbs = 0;
             let totalFat = 0;
@@ -368,12 +655,10 @@
                 });
             });
             
-            // Mettre à jour l'interface
             document.getElementById('protein-amount').textContent = totalProtein;
             document.getElementById('carbs-amount').textContent = totalCarbs;
             document.getElementById('fat-amount').textContent = totalFat;
             
-            // Mettre à jour les barres de progression
             const proteinPercent = Math.min(100, (totalProtein / appData.nutritionGoals.protein) * 100);
             const carbsPercent = Math.min(100, (totalCarbs / appData.nutritionGoals.carbs) * 100);
             const fatPercent = Math.min(100, (totalFat / appData.nutritionGoals.fat) * 100);
@@ -381,6 +666,122 @@
             document.querySelector('.protein').style.width = `${proteinPercent}%`;
             document.querySelector('.carbs').style.width = `${carbsPercent}%`;
             document.querySelector('.fat').style.width = `${fatPercent}%`;
+        }
+
+        function initWorkoutHistory() {
+            const historyContainer = document.getElementById('workout-history');
+            historyContainer.innerHTML = '';
+            
+            for (let i = 0; i < appData.programDuration; i++) {
+                const workoutDate = new Date(appData.startDate);
+                workoutDate.setDate(appData.startDate.getDate() + i);
+                
+                const workoutCard = document.createElement('div');
+                workoutCard.className = 'workout-card animate__animated animate__fadeIn';
+                workoutCard.style.animationDelay = `${i * 0.05}s`;
+                workoutCard.innerHTML = `
+                    <div class="workout-date">
+                        ${workoutDate.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })}
+                        ${i < appData.currentDay - 1 ? '<span class="completed-badge">✓ Complété</span>' : ''}
+                    </div>
+                    <div class="workout-details">
+                        <p><strong>Séance :</strong> ${getWorkoutForDay(i + 1)}</p>
+                        <p><strong>Durée :</strong> ${getRandomDuration()} min</p>
+                        <button class="view-details-btn" data-day="${i + 1}">Voir le détail</button>
+                    </div>
+                `;
+                
+                workoutCard.querySelector('.view-details-btn').addEventListener('click', function() {
+                    showDayData(parseInt(this.dataset.day));
+                });
+                
+                historyContainer.appendChild(workoutCard);
+            }
+        }
+
+        function showDayData(day) {
+            const modal = document.getElementById('day-modal');
+            const dayDate = new Date(appData.startDate);
+            dayDate.setDate(appData.startDate.getDate() + day - 1);
+            
+            document.getElementById('modal-day-title').textContent = 
+                `Jour ${day} - ${dayDate.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })}`;
+            
+            // Données d'exemple - à remplacer par vos données réelles
+            document.getElementById('modal-workout-data').innerHTML = `
+                <p><strong>Statut:</strong> ${day < appData.currentDay ? 'Complété' : 'À venir'}</p>
+                <p><strong>Type:</strong> ${getWorkoutForDay(day)}</p>
+                <p><strong>Exercices:</strong></p>
+                <ul>
+                    <li>Squat: 4x12 (60kg)</li>
+                    <li>Développé couché: 4x10 (50kg)</li>
+                    <li>Tractions: 3x8</li>
+                </ul>
+                <p><strong>Notes:</strong> Bonne séance, augmenter poids squat la prochaine fois</p>
+            `;
+            
+            document.getElementById('modal-nutrition-data').innerHTML = `
+                <p><strong>Calories:</strong> 1850 kcal</p>
+                <p><strong>Macros:</strong></p>
+                <ul>
+                    <li>Protéines: 120g</li>
+                    <li>Glucides: 150g</li>
+                    <li>Lipides: 60g</li>
+                </ul>
+                <p><strong>Repas:</strong></p>
+                <ul>
+                    <li>Petit-déj: Oeufs, avoine, fruits</li>
+                    <li>Déjeuner: Poulet, riz, légumes</li>
+                    <li>Dîner: Poisson, patate douce</li>
+                </ul>
+            `;
+            
+            modal.style.display = 'flex';
+        }
+
+        // Fonctions utilitaires
+        function getWorkoutForDay(day) {
+            const workouts = [
+                "Full Body",
+                "Haut du corps",
+                "Bas du corps",
+                "Cardio",
+                "Repos actif"
+            ];
+            return workouts[(day - 1) % workouts.length];
+        }
+
+        function getRandomDuration() {
+            return Math.floor(Math.random() * 30) + 30;
+        }
+
+        // Fermeture de la modale
+        document.getElementById('close-modal').addEventListener('click', function() {
+            document.getElementById('day-modal').style.display = 'none';
+        });
+
+        // Données d'exemple
+        addFoodItem('breakfast', 'Oeufs', 18, 1, 15);
+        addFoodItem('breakfast', 'Flocons d\'avoine', 5, 27, 3);
+        addFoodItem('lunch', 'Poulet grillé', 30, 0, 3);
+        addFoodItem('lunch', 'Riz complet', 5, 45, 2);
+        addFoodItem('dinner', 'Saumon', 20, 0, 8);
+        addFoodItem('dinner', 'Brocolis', 3, 7, 0);
+
+        function addFoodItem(meal, name, protein, carbs, fat) {
+            const food = { name, protein, carbs, fat };
+            appData.todayMeals[meal].push(food);
+            updateNutritionProgress();
+            
+            const mealContainer = document.getElementById(`${meal}-items`);
+            if (mealContainer) {
+                const foodElement = document.createElement('div');
+                foodElement.className = 'food-item';
+                foodElement.innerHTML = `
+                    <p>${name} <span>${protein}g P / ${carbs}g G / ${fat}g L</span></p>
+                `;
+                mealContainer.appendChild(foodElement);
+            }
         }
     </script>
 </body>
